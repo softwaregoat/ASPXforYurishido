@@ -1,14 +1,21 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="SimpleASPX._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
-    <div class="jumbotron">
+    <style>
+        input{
+            width:100px;
+        }
+    </style>
+    <div class="row">
         <h1>Generate Defect Number</h1>
         <p class="lead" style="color:red;">**PLEASE NOTE THE UNIQUE IDENTIFIER FORMAT HAS CHANGED**</p>
+    </div>
+    <div class="row">
+        <label for="site">Filter:</label>
+        <input id="myInput" type="text" placeholder="Search..">
         <asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
     </div>
-
-    <div class="row">
+    <div class="row  justify-content-center ">
          <p class="lead" style="color:red;">Add a new Unique ID</p>
         <form class="form" >
             <div class="form-group">
@@ -44,5 +51,46 @@
             </div>
         </form>
     </div>
-
+    <script>
+        $(document).ready(function(){
+              $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                  $("tbody tr").filter(function () {
+                      var txt = '';
+                      $(this).find('input').each(function (ii, em) {
+                          txt += $(em).val();
+                      });
+                  $(this).toggle(txt.toLowerCase().indexOf(value) > -1)
+                });
+              });
+            $("input.update").click(
+                function () {
+                    var tr = $(this).closest('tr');
+                    var tds = $(tr).find('td');
+                    $.ajax
+                        ({
+                            type: "POST",
+                            url: "Table/Edit",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",  
+                            data: JSON.stringify({
+                                'RecordID': $(tds[0]).text(),
+                                'UniqueID': $(tds[1]).find('input').val(),
+                                'Program': $(tds[3]).find('input').val(),
+                                'ProgramSubcode': $(tds[4]).find('input').val(),
+                                'InitiatingReason': $(tds[5]).find('input').val(),
+                                'IssueOrigin': $(tds[6]).find('input').val(),
+                                'IssueDesc': $(tds[7]).find('input').val(),
+                                'OriginalDefect': $(tds[8]).find('input').val(),
+                                'EnteredByUserID': $(tds[9]).find('input').val(),
+                                'Site': $(tds[10]).find('input').val()
+                            }),
+                            success: function (msg) {
+                                alert(msg);
+                            }
+                        });
+                }
+            );
+        });
+    </script>
 </asp:Content>

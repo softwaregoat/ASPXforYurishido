@@ -24,8 +24,7 @@ namespace SimpleASPX
                 StringBuilder html = new StringBuilder();
 
                 //Table start.
-                html.Append("<table border = '1'>");
-
+                html.Append("<table class='table table-bordered'><thead class='thead-dark'>");
                 //Building the Header row.
                 html.Append("<tr>");
                 foreach (DataColumn column in dt.Columns)
@@ -34,7 +33,7 @@ namespace SimpleASPX
                     html.Append(column.ColumnName);
                     html.Append("</th>");
                 }
-                html.Append("</tr>");
+                html.Append("<th>Update</th></tr></thead>");
 
                 //Building the Data rows.
                 foreach (DataRow row in dt.Rows)
@@ -42,11 +41,18 @@ namespace SimpleASPX
                     html.Append("<tr>");
                     foreach (DataColumn column in dt.Columns)
                     {
-                        html.Append("<td>");
+                        if (column.ColumnName == "RecordID")
+                        {
+                            html.Append("<td>");
+                            html.Append(row[column.ColumnName]);
+                            html.Append("</td>");
+                            continue;
+                        }
+                        html.Append("<td><input type='text' value='");
                         html.Append(row[column.ColumnName]);
-                        html.Append("</td>");
+                        html.Append("'/></td>");
                     }
-                    html.Append("</tr>");
+                    html.Append("<td><input type='button' class='update' value='Update'/></td></tr>");
                 }
 
                 //Table end.
