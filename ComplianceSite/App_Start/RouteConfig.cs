@@ -13,6 +13,7 @@ namespace ComplianceSite
         {
             var settings = new FriendlyUrlSettings();
             settings.AutoRedirectMode = RedirectMode.Permanent;
+            settings.AutoRedirectMode = RedirectMode.Off;
             routes.EnableFriendlyUrls(settings);
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

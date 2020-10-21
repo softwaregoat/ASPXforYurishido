@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -181,5 +182,41 @@ namespace ComplianceSite
             }
             Response.Redirect("~/Default.aspx");
         }
+        [System.Web.Services.WebMethod]
+        public static string UpdateRow(
+            string RecordID = "",
+            string InitiatingReason = "",
+            string IssueOrigin = "",
+            string IssueDesc = ""
+           )
+        {
+            try
+            {
+                string constr = ConfigurationManager.ConnectionStrings["abigail"].ConnectionString;
+                var sql = "UPDATE [dbo].[tbl] SET " +
+                    "[InitiatingReason] = '" + InitiatingReason +
+                    "' ,[IssueOrigin] = '" + IssueOrigin +
+                    "' ,[IssueDesc] = '" + IssueDesc +
+                    "' WHERE [RecordID] = '" + RecordID +
+                    "'";
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    using (SqlCommand command = new SqlCommand(sql, con))
+                    {
+                        con.Open();
+                        int result = command.ExecuteNonQuery();
+                        // Check Error
+                        if (result < 0)
+                            return "Error inserting data into Database!";
+                    }
+                }
+                return "Success inserting data into Database!";
+            }
+            catch
+            {
+                return "Error inserting data into Database!";
+            }
+        }
+
     }
 }

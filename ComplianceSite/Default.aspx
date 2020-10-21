@@ -71,7 +71,7 @@
                     $.ajax
                         ({
                             type: "POST",
-                            url: "Table/Edit",
+                            url: "Default.aspx/UpdateRow",
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             data: JSON.stringify({
@@ -81,7 +81,7 @@
                                 'IssueDesc': $(tds[7]).find('input').val()
                             }),
                             success: function (msg) {
-                                alert(msg);
+                                alert(msg.d);
                             }
                         });
                 }
