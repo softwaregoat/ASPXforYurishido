@@ -41,16 +41,18 @@ namespace SimpleASPX
                     html.Append("<tr>");
                     foreach (DataColumn column in dt.Columns)
                     {
-                        if (column.ColumnName == "RecordID")
+                        if (column.ColumnName == "InitiatingReason" || column.ColumnName == "IssueOrigin" || column.ColumnName == "IssueDesc")
+                        {
+                            html.Append("<td><input type='text' value='");
+                            html.Append(row[column.ColumnName]);
+                            html.Append("'/></td>");
+                        }
+                        else
                         {
                             html.Append("<td>");
                             html.Append(row[column.ColumnName]);
                             html.Append("</td>");
-                            continue;
                         }
-                        html.Append("<td><input type='text' value='");
-                        html.Append(row[column.ColumnName]);
-                        html.Append("'/></td>");
                     }
                     html.Append("<td><input type='button' class='update' value='Update'/></td></tr>");
                 }

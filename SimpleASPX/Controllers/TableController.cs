@@ -54,29 +54,18 @@ namespace SimpleASPX.Controllers
         [HttpPost]
         public ActionResult Edit(
             string RecordID = "",
-            string UniqueID = "",
-            string Program = "",
-            string ProgramSubcode = "",
             string InitiatingReason = "",
             string IssueOrigin = "",
-            string IssueDesc = "",
-            string OriginalDefect = "",
-            string EnteredByUserID = "",
-            string Site = "")
+            string IssueDesc = ""
+           )
         {
             try
             {
                 string constr = ConfigurationManager.ConnectionStrings["abigail"].ConnectionString;
                 var sql = "UPDATE [dbo].[tbl] SET " +
-                    "[UniqueID] = '" + UniqueID +
-                    "' ,[Program] = '" + Program +
-                    "' ,[ProgramSubcode] = '" + ProgramSubcode +
-                    "' ,[InitiatingReason] = '" + InitiatingReason +
+                    "[InitiatingReason] = '" + InitiatingReason +
                     "' ,[IssueOrigin] = '" + IssueOrigin +
                     "' ,[IssueDesc] = '" + IssueDesc +
-                    "' ,[OriginalDefect] = '" + OriginalDefect +
-                    "' ,[EnteredByUserID] = '" + EnteredByUserID +
-                    "' ,[Site] = '" + Site +
                     "' WHERE [RecordID] = '" + RecordID +
                     "'";
                 using (SqlConnection con = new SqlConnection(constr))

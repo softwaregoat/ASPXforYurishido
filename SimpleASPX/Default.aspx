@@ -60,6 +60,7 @@
                       $(this).find('input').each(function (ii, em) {
                           txt += $(em).val();
                       });
+                      txt += $(this).text();
                   $(this).toggle(txt.toLowerCase().indexOf(value) > -1)
                 });
               });
@@ -75,15 +76,9 @@
                             dataType: "json",  
                             data: JSON.stringify({
                                 'RecordID': $(tds[0]).text(),
-                                'UniqueID': $(tds[1]).find('input').val(),
-                                'Program': $(tds[3]).find('input').val(),
-                                'ProgramSubcode': $(tds[4]).find('input').val(),
                                 'InitiatingReason': $(tds[5]).find('input').val(),
                                 'IssueOrigin': $(tds[6]).find('input').val(),
-                                'IssueDesc': $(tds[7]).find('input').val(),
-                                'OriginalDefect': $(tds[8]).find('input').val(),
-                                'EnteredByUserID': $(tds[9]).find('input').val(),
-                                'Site': $(tds[10]).find('input').val()
+                                'IssueDesc': $(tds[7]).find('input').val()
                             }),
                             success: function (msg) {
                                 alert(msg);

@@ -85,7 +85,6 @@ D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\bin\System.Net.Http.For
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\bin\System.Web.Http.xml
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\bin\System.Web.Http.WebHost.xml
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\obj\Debug\ComplianceSite.csprojAssemblyReference.cache
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\obj\Debug\ComplianceSite.csproj.CoreCompileInputs.cache
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\obj\Debug\ComplianceSite.csproj.CopyComplete
 D:\Project\VisualStudio\ASPX\ASPXforYurishido\SimpleASPX\obj\Debug\SimpleASPX.dll
