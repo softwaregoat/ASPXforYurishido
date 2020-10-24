@@ -34,7 +34,7 @@
                 <select id="filter_site" runat="server" />
             </div>
             
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <label for="filter_subcode">Program Subcode:</label>
                 <select id="filter_subcode" runat="server"/>
             </div>
@@ -100,21 +100,21 @@
                 $("#filter_site, #filter_subcode").on("change", function () {
                     var site = $('#filter_site').val().toLowerCase();
                     var subcode = $('#filter_subcode').val().toLowerCase();
-                    var value = $(this).val().toLowerCase();
                     $("tbody tr").filter(function () {
+                        if (site == '' && subcode == '') {
+                            $(this).toggle(true);
+                            return;
+                        }
                         var txt = '';
                         $(this).find('input').each(function (ii, em) {
                             txt += $(em).val();
                         });
                         txt += $(this).text();
                         var flag = false;
-                        if (txt.toLowerCase().indexOf(value) > -1) {
-
-                        }
                         if (txt.toLowerCase().indexOf(site) > -1 &&
                             txt.toLowerCase().indexOf(subcode) > -1) {
                             flag = true;
-                        }
+                        }    
                         $(this).toggle(flag);
                     });
                 });

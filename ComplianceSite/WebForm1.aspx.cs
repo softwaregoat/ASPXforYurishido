@@ -157,12 +157,14 @@ namespace ComplianceSite
                 site.Items.Add(new ListItem("Site4", "Site4"));
                 site.Items.Add(new ListItem("Site5", "Site5"));
 
+                filter_site.Items.Add(new ListItem("Select a Site", ""));
                 filter_site.Items.Add(new ListItem("Site1", "Site1"));
                 filter_site.Items.Add(new ListItem("Site2", "Site2"));
                 filter_site.Items.Add(new ListItem("Site3", "Site3"));
                 filter_site.Items.Add(new ListItem("Site4", "Site4"));
                 filter_site.Items.Add(new ListItem("Site5", "Site5"));
 
+                filter_subcode.Items.Add(new ListItem("Select a Subcode", ""));
                 filter_subcode.Items.Add(new ListItem("THD", "THD"));
                 filter_subcode.Items.Add(new ListItem("403", "403"));
                 filter_subcode.Items.Add(new ListItem("MSE", "MSE"));
