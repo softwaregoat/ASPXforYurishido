@@ -27,7 +27,7 @@ namespace ComplianceSite
                 StringBuilder html = new StringBuilder();
 
                 //Table start.
-                html.Append("<table class='table table-bordered'><thead class='thead-dark'>");
+                html.Append("<table class='table table-bordered table-striped'><thead class='thead-dark'>");
                 //Building the Header row.
                 html.Append("<tr>");
                 foreach (DataColumn column in dt.Columns)
@@ -54,11 +54,62 @@ namespace ComplianceSite
                     {
                         if (userRole == "Admin")
                         {
-                            if (column.ColumnName == "InitiatingReason" || column.ColumnName == "IssueOrigin" || column.ColumnName == "IssueDesc")
+                            if (column.ColumnName == "IssueDesc")
                             {
                                 html.Append("<td><input type='text' value='");
                                 html.Append(row[column.ColumnName]);
                                 html.Append("'/></td>");
+                            }
+                            else if (column.ColumnName == "InitiatingReason")
+                            {
+                                html.Append("<td><select>");
+                                if (row[column.ColumnName].ToString() == "QA Finding")
+                                {
+                                    html.Append("<option value='QA Finding' selected>QA Finding</option>");
+                                }
+                                else
+                                {
+                                    html.Append("<option value='QA Finding'>QA Finding</option>");
+                                }
+
+                                if (row[column.ColumnName].ToString() == "Supplier Disclosure")
+                                {
+                                    html.Append("<option value='Supplier Disclosure' selected>Supplier Disclosure</option>");
+                                }
+                                else
+                                {
+                                    html.Append("<option value='Supplier Disclosure'>Supplier Disclosure</option>");
+                                }
+                                html.Append("</select></td>");
+                            }
+                            else if (column.ColumnName == "IssueOrigin")
+                            {
+                                html.Append("<td><select>");
+                                if (row[column.ColumnName].ToString() == "Supplier")
+                                {
+                                    html.Append("<option value='Supplier' selected>Supplier</option>");
+                                }
+                                else
+                                {
+                                    html.Append("<option value='Supplier'>Supplier</option>");
+                                }
+
+                                if (row[column.ColumnName].ToString() == "UY")
+                                {
+                                    html.Append("<option value='UY' selected>UY</option>");
+                                }
+                                else
+                                {
+                                    html.Append("<option value='UY'>UY</option>");
+                                }
+
+                                html.Append("</select></td>");
+                            }
+                            else if (column.ColumnName == "EntryDate")
+                            {
+                                html.Append("<td>");
+                                html.Append(DateTime.Parse(row[column.ColumnName].ToString()).ToShortDateString());
+                                html.Append("</td>");
                             }
                             else
                             {
@@ -69,9 +120,18 @@ namespace ComplianceSite
                         }
                         else
                         {
-                            html.Append("<td>");
-                            html.Append(row[column.ColumnName]);
-                            html.Append("</td>");
+                            if (column.ColumnName == "EntryDate")
+                            {
+                                html.Append("<td>");
+                                html.Append(DateTime.Parse(row[column.ColumnName].ToString()).ToShortDateString());
+                                html.Append("</td>");
+                            }
+                            else
+                            {
+                                html.Append("<td>");
+                                html.Append(row[column.ColumnName]);
+                                html.Append("</td>");
+                            }
                         }
 
                     }
@@ -97,6 +157,17 @@ namespace ComplianceSite
                 site.Items.Add(new ListItem("Site4", "Site4"));
                 site.Items.Add(new ListItem("Site5", "Site5"));
 
+                filter_site.Items.Add(new ListItem("Site1", "Site1"));
+                filter_site.Items.Add(new ListItem("Site2", "Site2"));
+                filter_site.Items.Add(new ListItem("Site3", "Site3"));
+                filter_site.Items.Add(new ListItem("Site4", "Site4"));
+                filter_site.Items.Add(new ListItem("Site5", "Site5"));
+
+                filter_subcode.Items.Add(new ListItem("THD", "THD"));
+                filter_subcode.Items.Add(new ListItem("403", "403"));
+                filter_subcode.Items.Add(new ListItem("MSE", "MSE"));
+                filter_subcode.Items.Add(new ListItem("SUB", "SUB"));
+
 
                 program.Items.Add(new ListItem("Program1", "Program1"));
                 program.Items.Add(new ListItem("Program2", "Program2"));
@@ -105,17 +176,11 @@ namespace ComplianceSite
                 program.Items.Add(new ListItem("Program5", "Program5"));
 
 
-                reason.Items.Add(new ListItem("Reason1", "Reason1"));
-                reason.Items.Add(new ListItem("Reason2", "Reason2"));
-                reason.Items.Add(new ListItem("Reason3", "Reason3"));
-                reason.Items.Add(new ListItem("Reason4", "Reason4"));
-                reason.Items.Add(new ListItem("Reason5", "Reason5"));
+                reason.Items.Add(new ListItem("QA Finding", "QA Finding"));
+                reason.Items.Add(new ListItem("Supplier Disclosure", "Supplier Disclosure"));
 
-                issue.Items.Add(new ListItem("IssueOrigin1", "IssueOrigin1"));
-                issue.Items.Add(new ListItem("IssueOrigin2", "IssueOrigin2"));
-                issue.Items.Add(new ListItem("IssueOrigin3", "IssueOrigin3"));
-                issue.Items.Add(new ListItem("IssueOrigin4", "IssueOrigin4"));
-                issue.Items.Add(new ListItem("IssueOrigin5", "IssueOrigin5"));
+                issue.Items.Add(new ListItem("Supplier", "Supplier"));
+                issue.Items.Add(new ListItem("UY", "UY"));
 
                 subcode.Text = "";
                 defect.Text = "";
@@ -146,7 +211,7 @@ namespace ComplianceSite
         protected void submit_Click(object sender, EventArgs e)
         {
             string constr = ConfigurationManager.ConnectionStrings["abigail"].ConnectionString;
-            string UniqueID = "";
+            int UniqueID = 1;
             string EntryDate = DateTime.Now.ToShortDateString();
             string Program = program.Value;
             string ProgramSubcode = subcode.Text;
@@ -156,7 +221,24 @@ namespace ComplianceSite
             string OriginalDefect = defect.Text;
             string EnteredByUserID = "";
             string Site = site.Value;
-            string sql = "INSERT INTO[dbo].[tbl] ([UniqueID] ,[EntryDate] ,[Program] ,[ProgramSubcode] ,[InitiatingReason] ,[IssueOrigin] ,[IssueDesc] ,[OriginalDefect] ,[EnteredByUserID] ,[Site]) VALUES (" +
+            var sql1 = "SELECT max([UniqueID])  FROM[abigail].[dbo].[tbl]  WHERE year([EntryDate]) = '" + DateTime.Now.Year + "'";
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql1, con))
+                {
+                    con.Open();
+                    var temp = cmd.ExecuteScalar();
+                    if (temp != null)
+                    {
+                        UniqueID = int.Parse(temp.ToString()) + 1;
+                    }
+                    con.Close();
+                }
+            }
+            string UIDFull = Site + "-" + DateTime.Now.Year + "-" + ProgramSubcode + "-" + UniqueID.ToString("00000") +"-A"; 
+
+            string sql = "INSERT INTO[dbo].[tbl] ([UniqueID] ,[EntryDate] ,[Program] ,[ProgramSubcode] ,[InitiatingReason] ,[IssueOrigin] ,[IssueDesc] ,[OriginalDefect] ,[EnteredByUserID] ,[Site], [UIDFull]) VALUES (" +
                 "'" + UniqueID +
                 "' ,'" + EntryDate +
                 "' ,'" + Program +
@@ -167,6 +249,7 @@ namespace ComplianceSite
                 "' ,'" + OriginalDefect +
                 "' ,'" + EnteredByUserID +
                 "' ,'" + Site +
+                "' ,'" + UIDFull +
                 "')";
             using (SqlConnection con = new SqlConnection(constr))
             {

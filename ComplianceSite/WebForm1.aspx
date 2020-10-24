@@ -9,8 +9,14 @@
 </head>
 <body>
     <style>
-        input{
-            width:100px;
+        td{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align:center;
+        }
+        th{
+            text-align:center;
         }
     </style>
     <div class="container">
@@ -19,14 +25,26 @@
             <p class="lead" style="color:red;">**PLEASE NOTE THE UNIQUE IDENTIFIER FORMAT HAS CHANGED**</p>
         </div>
         <div class="row">
-            <label for="site">Filter:</label>
-            <input id="myInput" type="text" placeholder="Search.."/>
+            <div class="col-md-3">
+                <label for="site" >Filter:</label>
+                <input id="myInput" type="text" placeholder="Search.." />
+            </div>
+            <div class="col-md-2">
+                <label for="filter_site">Site:</label>
+                <select id="filter_site" runat="server" />
+            </div>
+            
+            <div class="col-md-3">
+                <label for="filter_subcode">Program Subcode:</label>
+                <select id="filter_subcode" runat="server"/>
+            </div>
+            
+        </div>
+        <div class="row">
             <asp:PlaceHolder ID="PlaceHolder1" runat="server" />
         </div>
         <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                     <p class="lead" style="color:red;">Add a new Unique ID</p>
                     <form class="form" runat="server">
                         <div class="form-group">
@@ -63,7 +81,7 @@
                         </div>
                     </form>
                 </div>
-            <div class="col-md-3">
+            <div class="col-md-8">
             </div>
         </div>
         <script>
@@ -79,6 +97,27 @@
                         $(this).toggle(txt.toLowerCase().indexOf(value) > -1)
                     });
                 });
+                $("#filter_site, #filter_subcode").on("change", function () {
+                    var site = $('#filter_site').val().toLowerCase();
+                    var subcode = $('#filter_subcode').val().toLowerCase();
+                    var value = $(this).val().toLowerCase();
+                    $("tbody tr").filter(function () {
+                        var txt = '';
+                        $(this).find('input').each(function (ii, em) {
+                            txt += $(em).val();
+                        });
+                        txt += $(this).text();
+                        var flag = false;
+                        if (txt.toLowerCase().indexOf(value) > -1) {
+
+                        }
+                        if (txt.toLowerCase().indexOf(site) > -1 &&
+                            txt.toLowerCase().indexOf(subcode) > -1) {
+                            flag = true;
+                        }
+                        $(this).toggle(flag);
+                    });
+                });
                 $("input.update").click(
                     function () {
                         var tr = $(this).closest('tr');
@@ -90,8 +129,8 @@
                             dataType: "json",
                             data: JSON.stringify({
                                 'RecordID': $(tds[0]).text(),
-                                'InitiatingReason': $(tds[5]).find('input').val(),
-                                'IssueOrigin': $(tds[6]).find('input').val(),
+                                'InitiatingReason': $(tds[5]).find('select').val(),
+                                'IssueOrigin': $(tds[6]).find('select').val(),
                                 'IssueDesc': $(tds[7]).find('input').val()
                             }),
                             success: function (msg) {
