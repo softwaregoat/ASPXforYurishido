@@ -105,13 +105,25 @@
                             $(this).toggle(true);
                             return;
                         }
-                        var site_txt = $(this).find('td:nth-child(10)').text();
-                        var subcode_txt = $(this).find('td:nth-child(4)').text();
+                        var site_txt = $(this).find('td:nth-child(11)').text();
+                        var subcode_txt = $(this).find('td:nth-child(5)').text();
                         var flag = false;
-                        if (site_txt == site &&
-                            subcode_txt == subcode) {
-                            flag = true;
-                        }    
+                        if (site == '') {
+                            if (subcode_txt == subcode) {
+                                flag = true;
+                            }
+                        }
+                        else if (subcode == '') {
+                            if (site_txt == site) {
+                                flag = true;
+                            }
+                        } else {
+                            if (site_txt == site &&
+                                subcode_txt == subcode) {
+                                flag = true;
+                            }
+                        }
+                        
                         $(this).toggle(flag);
                     });
                 });
