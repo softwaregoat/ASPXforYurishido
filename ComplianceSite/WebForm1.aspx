@@ -98,21 +98,18 @@
                     });
                 });
                 $("#filter_site, #filter_subcode").on("change", function () {
-                    var site = $('#filter_site').val().toLowerCase();
-                    var subcode = $('#filter_subcode').val().toLowerCase();
+                    var site = $('#filter_site').val();
+                    var subcode = $('#filter_subcode').val();
                     $("tbody tr").filter(function () {
                         if (site == '' && subcode == '') {
                             $(this).toggle(true);
                             return;
                         }
-                        var txt = '';
-                        $(this).find('input').each(function (ii, em) {
-                            txt += $(em).val();
-                        });
-                        txt += $(this).text();
+                        var site_txt = $(this).find('td:nth-child(10)').text();
+                        var subcode_txt = $(this).find('td:nth-child(4)').text();
                         var flag = false;
-                        if (txt.toLowerCase().indexOf(site) > -1 &&
-                            txt.toLowerCase().indexOf(subcode) > -1) {
+                        if (site_txt == site &&
+                            subcode_txt == subcode) {
                             flag = true;
                         }    
                         $(this).toggle(flag);
