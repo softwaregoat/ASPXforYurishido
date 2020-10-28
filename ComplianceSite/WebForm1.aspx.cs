@@ -56,9 +56,9 @@ namespace ComplianceSite
                         {
                             if (column.ColumnName == "IssueDesc")
                             {
-                                html.Append("<td><input type='text' value='");
+                                html.Append("<td><textarea>");
                                 html.Append(row[column.ColumnName]);
-                                html.Append("'/></td>");
+                                html.Append("</textarea></td>");
                             }
                             else if (column.ColumnName == "InitiatingReason")
                             {
@@ -276,8 +276,51 @@ namespace ComplianceSite
         {
             try
             {
+                int UniqueID = 0;
+                string OldInitiatingReason = "";
+                string OldIssueOrigin = "";
+                string OldIssueDesc = "";
                 string constr = ConfigurationManager.ConnectionStrings["abigail"].ConnectionString;
-                var sql = "UPDATE [dbo].[tbl] SET " +
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[tbl] WHERE [RecordID] = '" + RecordID + "'", con))
+                    {
+                        con.Open();
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+
+                            if (rdr.HasRows)
+                            {
+                                rdr.Read(); // get the first row
+                                UniqueID = rdr.GetInt32(1);
+                                OldInitiatingReason = rdr.GetString(5);
+                                OldIssueOrigin = rdr.GetString(6);
+                                OldIssueDesc = rdr.GetString(7);
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+                string sql = "INSERT INTO[dbo].[LogTbl] ([ChangeDate] ,[UniqueID] ,[InitiatingReason] ,[IssueOrigin] ,[IssueDesc]) VALUES ('"
+                    + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                "' ,'" + UniqueID +
+                "' ,'" + (InitiatingReason == OldInitiatingReason?"":InitiatingReason) +
+                "' ,'" + (IssueOrigin == OldIssueOrigin? "":IssueOrigin) +
+                "' ,'" + (IssueDesc == OldIssueDesc? "":IssueDesc) +
+                "')";
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    using (SqlCommand command = new SqlCommand(sql, con))
+                    {
+                        con.Open();
+                        int result = command.ExecuteNonQuery();
+                        // Check Error
+                        if (result < 0)
+                            return "Error inserting data into Database!";
+                    }
+                    con.Close();
+                }
+                sql = "UPDATE [dbo].[tbl] SET " +
                     "[InitiatingReason] = '" + InitiatingReason +
                     "' ,[IssueOrigin] = '" + IssueOrigin +
                     "' ,[IssueDesc] = '" + IssueDesc +
@@ -293,6 +336,7 @@ namespace ComplianceSite
                         if (result < 0)
                             return "Error inserting data into Database!";
                     }
+                    con.Close();
                 }
                 return "Success inserting data into Database!";
             }

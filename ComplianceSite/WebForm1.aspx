@@ -25,9 +25,11 @@
             <p class="lead" style="color:red;">**PLEASE NOTE THE UNIQUE IDENTIFIER FORMAT HAS CHANGED**</p>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label for="site" >Filter:</label>
                 <input id="myInput" type="text" placeholder="Search.." />
+                <span>Count : </span>
+                <span id="count">0</span>
             </div>
             <div class="col-md-2">
                 <label for="filter_site">Site:</label>
@@ -88,16 +90,24 @@
             $(document).ready(function () {
                 $("#myInput").on("keyup", function () {
                     var value = $(this).val().toLowerCase();
+                    var count = 0;
                     $("tbody tr").filter(function () {
+                        var flag = false;
                         var txt = '';
                         $(this).find('input').each(function (ii, em) {
                             txt += $(em).val();
                         });
                         txt += $(this).text();
-                        $(this).toggle(txt.toLowerCase().indexOf(value) > -1)
+                        if (txt.toLowerCase().indexOf(value) > -1) {
+                            flag = true;
+                            count++;
+                        }
+                        $(this).toggle(flag);
                     });
+                    $('#count').text(count);
                 });
                 $("#filter_site, #filter_subcode").on("change", function () {
+                    var count = 0;
                     var site = $('#filter_site').val();
                     var subcode = $('#filter_subcode').val();
                     $("tbody tr").filter(function () {
@@ -123,9 +133,11 @@
                                 flag = true;
                             }
                         }
-                        
+
                         $(this).toggle(flag);
                     });
+                    count = $('tbody tr:visible').length;
+                    $('#count').text(count);
                 });
                 $("input.update").click(
                     function () {
@@ -140,7 +152,7 @@
                                 'RecordID': $(tds[0]).text(),
                                 'InitiatingReason': $(tds[5]).find('select').val(),
                                 'IssueOrigin': $(tds[6]).find('select').val(),
-                                'IssueDesc': $(tds[7]).find('input').val()
+                                'IssueDesc': $(tds[7]).find('textarea').val()
                             }),
                             success: function (msg) {
                                 alert(msg.d);
@@ -148,6 +160,25 @@
                         });
                     }
                 );
+
+                $('th').click(function () {
+                    $('th').each(function () {
+                        $(this).css('color', 'black');
+                    });
+                    $(this).css('color', 'red');
+                    var table = $(this).parents('table').eq(0)
+                    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                    this.asc = !this.asc
+                    if (!this.asc) { rows = rows.reverse() }
+                    for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+                })
+                function comparer(index) {
+                    return function (a, b) {
+                        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+                    }
+                }
+                function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
             });
         </script>
     </div>
