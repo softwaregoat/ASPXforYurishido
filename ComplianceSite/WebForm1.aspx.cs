@@ -27,11 +27,15 @@ namespace ComplianceSite
                 StringBuilder html = new StringBuilder();
 
                 //Table start.
-                html.Append("<table class='table table-bordered table-striped'><thead class='thead-dark'>");
+                html.Append("<table class='table-bordered table-striped'><thead class='thead-dark'>");
                 //Building the Header row.
                 html.Append("<tr>");
                 foreach (DataColumn column in dt.Columns)
                 {
+                    if (column.ColumnName == "UniqueID")
+                    {
+                        column.ColumnName = "UID";
+                    }
                     html.Append("<th>");
                     html.Append(column.ColumnName);
                     html.Append("</th>");
