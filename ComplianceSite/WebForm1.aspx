@@ -88,6 +88,8 @@
         </div>
         <script>
             $(document).ready(function () {
+                $("#filter_site").val("Site1");
+                filter();
                 $("#myInput").on("keyup", function () {
                     var value = $(this).val().toLowerCase();
                     var count = 0;
@@ -107,37 +109,7 @@
                     $('#count').text(count);
                 });
                 $("#filter_site, #filter_subcode").on("change", function () {
-                    var count = 0;
-                    var site = $('#filter_site').val();
-                    var subcode = $('#filter_subcode').val();
-                    $("tbody tr").filter(function () {
-                        if (site == '' && subcode == '') {
-                            $(this).toggle(true);
-                            return;
-                        }
-                        var site_txt = $(this).find('td:nth-child(11)').text();
-                        var subcode_txt = $(this).find('td:nth-child(5)').text();
-                        var flag = false;
-                        if (site == '') {
-                            if (subcode_txt == subcode) {
-                                flag = true;
-                            }
-                        }
-                        else if (subcode == '') {
-                            if (site_txt == site) {
-                                flag = true;
-                            }
-                        } else {
-                            if (site_txt == site &&
-                                subcode_txt == subcode) {
-                                flag = true;
-                            }
-                        }
-
-                        $(this).toggle(flag);
-                    });
-                    count = $('tbody tr:visible').length;
-                    $('#count').text(count);
+                    filter();
                 });
                 $("input.update").click(
                     function () {
@@ -179,6 +151,39 @@
                     }
                 }
                 function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+                function filter() {
+                    var count = 0;
+                    var site = $('#filter_site').val();
+                    var subcode = $('#filter_subcode').val();
+                    $("tbody tr").filter(function () {
+                        if (site == '' && subcode == '') {
+                            $(this).toggle(true);
+                            return;
+                        }
+                        var site_txt = $(this).find('td:nth-child(11)').text();
+                        var subcode_txt = $(this).find('td:nth-child(5)').text();
+                        var flag = false;
+                        if (site == '') {
+                            if (subcode_txt == subcode) {
+                                flag = true;
+                            }
+                        }
+                        else if (subcode == '') {
+                            if (site_txt == site) {
+                                flag = true;
+                            }
+                        } else {
+                            if (site_txt == site &&
+                                subcode_txt == subcode) {
+                                flag = true;
+                            }
+                        }
+
+                        $(this).toggle(flag);
+                    });
+                    count = $('tbody tr:visible').length;
+                    $('#count').text(count);
+                }
             });
         </script>
     </div>
