@@ -53,6 +53,21 @@
     </div>
     <script>
         $(document).ready(function () {
+            $('#MainContent_submit').click(function (e) {
+                let subcode = $('#MainContent_subcode').val();
+                if (subcode.length != 3) {
+                    alert('Subcode should be 3 characters only!');
+                    e.preventDefault();
+                    return;
+                }
+                
+                let desc = $('#MainContent_description').val();
+                if (desc.length == 0) {
+                    alert('Description should not be empty!');
+                    e.preventDefault();
+                    return;
+                }
+            });
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
                 $("tbody tr").filter(function () {
